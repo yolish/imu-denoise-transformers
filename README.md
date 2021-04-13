@@ -1,2 +1,1 @@
-# imu-denoise-transformers
-Denoising IMU data with Transformers 
+# Denoising IMU Data with Transformers
