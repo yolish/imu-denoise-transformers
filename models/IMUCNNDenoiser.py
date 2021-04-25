@@ -7,6 +7,7 @@ from torch import nn
 
 class IMUCNNDenoiser(nn.Module):
     def __init__(self, config, c0=16, dropout=0.1, ks=[7, 7, 7, 7], ds=[4, 4, 4], momentum=0.1 ):
+        super().__init__()
         # The cnn archtecture is taken from: Brosard 2020
         self.in_dim = config.get("input_dim")
         self.out_dim = self.in_dim
@@ -45,14 +46,16 @@ class IMUCNNDenoiser(nn.Module):
             torch.nn.GELU(),
             torch.nn.Dropout(dropout),
             torch.nn.Conv1d(c3, self.out_dim, 1, dilation=1),
-            torch.nn.ReplicationPad1d((0, 0)),  # no padding at end
+            torch.nn.ReplicationPad1d((0, 0))  # no padding at end
         )
 
-        def forward(self, data):
+    def forward(self, data):
             orig_src = data.get('imu')  # Shape N x S x C with S = sequence length, N = batch size, C = channels
+            print(orig_src.shape)
 
             # Estimate the noise residuals with convolutional backbone
-            minus_noise = self.cnn(orig_src)
+            minus_noise = self.cnn(orig_src.transpose(1,2))
+            minus_noise = minus_noise.transpose(1,2)
             # remove the noise
             clean_src = orig_src + minus_noise
 
