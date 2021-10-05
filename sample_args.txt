@@ -1,0 +1,9 @@
+### train ###
+
+train sample_data/07_03_21_static_random_accel_100_seq_of_1k_constant_train.csv
+
+### test ###
+test
+sample_data/07_03_21_static_random_accel_20_seq_of_1k_constant_test_1.csv
+--checkpoint_path
+sample_data/run_05_10_21_17_52_final.pth
